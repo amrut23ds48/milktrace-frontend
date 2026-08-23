@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MilkTrace Frontend
+
+This is the Next.js frontend application for the **MilkTrace** supply chain and anomaly detection platform. It is designed to be highly responsive, resilient to network issues, and data-driven for logistics optimization.
+
+## Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** Vanilla CSS Modules (Strictly Light Mode only)
+- **Mapping:** React Leaflet (`react-leaflet`)
+- **Charting:** Chart.js (`react-chartjs-2`)
+- **Testing:** Vitest + React Testing Library (RTL)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js >= 18.x
+- npm >= 9.x
 
+### Installation
+
+1. Install all dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Copy the example environment file and configure any necessary variables (e.g., API base URL):
+```bash
+cp .env.local.example .env.local
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+## Testing
 
-To learn more about Next.js, take a look at the following resources:
+We use **Vitest** for blistering-fast unit and component testing. Our testing philosophy strictly isolates data-fetching, logic, and state management from presentation before progressing to UI component testing.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To run the test suite:
+```bash
+npm run test
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+For watch mode during active development:
+```bash
+npm run test:watch
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+frontend/
+├── src/
+│   ├── app/           # Next.js App Router pages and layouts
+│   ├── components/    # Reusable UI components (Chart, Maps, Forms)
+│   ├── hooks/         # Custom React hooks (Data fetching, State)
+│   ├── services/      # API communication abstractions
+│   ├── types/         # Global TypeScript interfaces
+│   └── utils/         # Pure, side-effect-free helper functions
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## UI & Design Principles
+
+- **Aesthetics:** The UI relies on rich, modern web design aesthetics (vibrant accents, smooth gradients, and glassmorphism where appropriate). 
+- **Resilience:** All data-fetching layers must gracefully handle API loading states, 5xx backend errors, and network timeouts without crashing the React tree. Use Skeleton loaders during pending states.

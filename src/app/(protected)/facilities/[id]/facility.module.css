@@ -1,0 +1,145 @@
+/* ── Facility Detail Page ─────────────────────────────────────────────────── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  animation: fadeIn 0.25s ease;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.facilityMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.facilityType {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+  background: var(--brand-light);
+  padding: 2px var(--space-2);
+  border-radius: 4px;
+}
+
+.facilityDistrict {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.facilityName {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.headerStats {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-1);
+}
+
+.statValue {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Chart Card ─────────────────────────────────────────────────────────────── */
+.chartCard,
+.routesCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-5);
+}
+
+/* ── Skeletons ──────────────────────────────────────────────────────────────── */
+.headerSkeleton {
+  height: 80px;
+  border-radius: var(--border-radius-md);
+}
+
+.chartCardSkeleton {
+  height: 260px;
+  border-radius: var(--border-radius-md);
+}
+
+.routeSkeleton {
+  height: 120px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* ── Routes Table ──────────────────────────────────────────────────────────── */
+.routeTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.routeTable th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.routeTable td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.routeTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.routeTable tbody tr:hover td {
+  background: var(--bg-surface-2);
+}
+
+.emptyText {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--space-8) 0;
+}

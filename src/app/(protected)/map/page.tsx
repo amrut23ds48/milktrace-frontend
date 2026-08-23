@@ -16,7 +16,7 @@ import styles from './map.module.css';
 
 // ── Dynamic import — disables SSR for the Leaflet map ────────────────────────
 const MaharashtraMap = dynamic(
-  () => import('../../components/map/MaharashtraMap'),
+  () => import('../../../components/map/MaharashtraMap'),
   {
     ssr: false,
     loading: () => (

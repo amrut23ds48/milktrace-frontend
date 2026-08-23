@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useKpiMetrics, useRecentAnomalies } from '../useDashboard';
 import { dashboardService } from '../../services/dashboardService';
+import type { KpiMetrics, AnomalyEvent } from '../../types/dashboard.types';
 
 // Mock the dashboardService
 vi.mock('../../services/dashboardService', () => ({
@@ -35,7 +36,7 @@ describe('useDashboard hooks', () => {
     });
 
     it('should transition to success state with data', async () => {
-      const mockData = { milkCollectedToday: 1000 } as any;
+      const mockData = { milkCollectedToday: 1000 } as unknown as KpiMetrics;
       vi.mocked(dashboardService.fetchKpiMetrics).mockResolvedValue(mockData);
       
       const { result } = renderHook(() => useKpiMetrics());
@@ -64,7 +65,7 @@ describe('useDashboard hooks', () => {
 
   describe('useRecentAnomalies', () => {
     it('should pass the limit parameter correctly', async () => {
-      const mockData = [{ id: '1' }] as any;
+      const mockData = [{ id: '1' }] as unknown as AnomalyEvent[];
       vi.mocked(dashboardService.fetchRecentAnomalies).mockResolvedValue(mockData);
       
       renderHook(() => useRecentAnomalies(3));

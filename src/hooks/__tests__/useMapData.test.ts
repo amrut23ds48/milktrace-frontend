@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useMapFacilities, useMapRoutes, useDistrictStats } from '../useMapData';
 import { mapService } from '../../services/mapService';
+import type { MapFacility } from '../../types/map.types';
 
 vi.mock('../../services/mapService', () => ({
   mapService: {
@@ -22,7 +23,7 @@ describe('useMapData hooks', () => {
 
   describe('useMapFacilities', () => {
     it('should transition to success state', async () => {
-      const mockData = [{ id: '1' }] as any;
+      const mockData = [{ id: '1' }] as unknown as MapFacility[];
       vi.mocked(mapService.fetchMapFacilities).mockResolvedValue(mockData);
 
       const { result } = renderHook(() => useMapFacilities());

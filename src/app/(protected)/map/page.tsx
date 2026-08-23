@@ -6,12 +6,12 @@
 
 import dynamic from 'next/dynamic';
 import { useState, useCallback } from 'react';
-import MapLayerControls from '../../components/map/MapLayerControls';
-import MapFilterBar from '../../components/map/MapFilterBar';
-import MapLegend from '../../components/map/MapLegend';
-import RouteDetailPanel from '../../components/map/RouteDetailPanel';
-import { useMapFacilities, useMapRoutes, useDistrictStats } from '../../hooks/useMapData';
-import type { MapFilters, MapLayers, MapRoute } from '../../types/map.types';
+import MapLayerControls from '../../../components/map/MapLayerControls';
+import MapFilterBar from '../../../components/map/MapFilterBar';
+import MapLegend from '../../../components/map/MapLegend';
+import RouteDetailPanel from '../../../components/map/RouteDetailPanel';
+import { useMapFacilities, useMapRoutes, useDistrictStats } from '../../../hooks/useMapData';
+import type { MapFilters, MapLayers, MapRoute } from '../../../types/map.types';
 import styles from './map.module.css';
 
 // ── Dynamic import — disables SSR for the Leaflet map ────────────────────────

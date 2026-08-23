@@ -4,16 +4,16 @@
 // ─── Super Admin Dashboard Page ───────────────────────────────────────────────
 // Phase 7 — KPI Strip, Volume Trend, Collection vs Receipt, Anomaly List, Top Risk Facilities
 
-import KpiStrip from '../../components/dashboard/KpiStrip';
-import AnomalyList from '../../components/dashboard/AnomalyList';
-import VolumeTrendChart from '../../components/dashboard/VolumeTrendChart';
-import CollectionReceiptChart from '../../components/dashboard/CollectionReceiptChart';
-import TopRiskFacilities from '../../components/dashboard/TopRiskFacilities';
+import KpiStrip from '../../../components/dashboard/KpiStrip';
+import AnomalyList from '../../../components/dashboard/AnomalyList';
+import VolumeTrendChart from '../../../components/dashboard/VolumeTrendChart';
+import CollectionReceiptChart from '../../../components/dashboard/CollectionReceiptChart';
+import TopRiskFacilities from '../../../components/dashboard/TopRiskFacilities';
 import {
   useKpiMetrics,
   useRecentAnomalies,
   useTopRiskFacilities,
-} from '../../hooks/useDashboard';
+} from '../../../hooks/useDashboard';
 import styles from './dashboard.module.css';
 
 export default function DashboardPage() {

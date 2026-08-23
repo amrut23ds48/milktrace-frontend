@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import AppShell from '../components/layout/AppShell';
+import { AuthProvider } from '../context/AuthContext';
 
 export const metadata: Metadata = {
   title: 'MilkTrace — Maharashtra Milk Supply Chain',
@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <AppShell>{children}</AppShell>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

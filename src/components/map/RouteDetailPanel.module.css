@@ -1,0 +1,263 @@
+/* ── Route Detail Panel ───────────────────────────────────────────────────── */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 340px;
+  background: var(--bg-surface);
+  border-left: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  pointer-events: all;
+  animation: slideIn 0.25s ease;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────── */
+.header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-surface-2);
+  flex-shrink: 0;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.routeTag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--color-danger-bg);
+  color: var(--color-danger-text);
+}
+
+.routeTagNormal       { background: var(--color-normal-bg);  color: var(--color-normal-text); }
+.routeTagInTransit    { background: var(--color-info-bg);    color: var(--color-info-text); }
+.routeTagAnomalous    { background: var(--color-danger-bg);  color: var(--color-danger-text); }
+.routeTagInvestigating{ background: var(--color-warning-bg); color: var(--color-warning-text); }
+
+.closeBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  font-size: 14px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+}
+
+.closeBtn:hover { background: var(--border-color); }
+
+.routeId {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.routeLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Body ──────────────────────────────────────────────────────────────────── */
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* ── Metrics grid ─────────────────────────────────────────────────────────── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.metric {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-3);
+}
+
+.metricLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.metricValue {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.metricSub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.lossValue { color: var(--color-danger); }
+
+/* ── Risk score ──────────────────────────────────────────────────────────── */
+.riskSection {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-3) var(--space-4);
+}
+
+.riskHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.riskTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.riskScore {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.riskHigh   { color: var(--color-danger); }
+.riskMedium { color: var(--color-warning); }
+.riskLow    { color: var(--color-normal); }
+
+.riskBar {
+  height: 6px;
+  background: var(--bg-page);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.riskFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.riskFillHigh   { background: linear-gradient(90deg, #f97316, #dc2626); }
+.riskFillMedium { background: linear-gradient(90deg, #eab308, #d97706); }
+.riskFillLow    { background: var(--color-normal); }
+
+/* ── Alerts list ─────────────────────────────────────────────────────────── */
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-2);
+}
+
+.alertList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.alertItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--color-danger-bg);
+  border: 1px solid rgba(220,38,38,0.15);
+  border-radius: var(--border-radius-sm);
+  padding: var(--space-2) var(--space-3);
+  line-height: 1.4;
+}
+
+.alertIcon { color: var(--color-danger); flex-shrink: 0; }
+
+.noAlerts {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ── Action buttons ─────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.actionBtn {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--border-radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actionPrimary {
+  background: var(--brand-primary);
+  color: #fff;
+  border: none;
+}
+
+.actionPrimary:hover {
+  background: var(--brand-dark);
+  transform: translateY(-1px);
+}
+
+.actionSecondary {
+  background: var(--bg-surface-2);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.actionSecondary:hover { background: var(--bg-page); }

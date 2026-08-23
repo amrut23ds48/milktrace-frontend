@@ -13,3 +13,14 @@ export type {
   DateRange,
   RiskLevel,
 } from './dashboard.types';
+
+export type {
+  FacilityType,
+  RouteStatus,
+  RiskBand,
+  MapFacility,
+  MapRoute,
+  DistrictStats,
+  MapLayers,
+  MapFilters,
+} from './map.types';

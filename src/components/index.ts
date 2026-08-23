@@ -1,9 +1,15 @@
 // components/index.ts
 // ─── Reusable UI Components ───────────────────────────────────────────────────
-// All shared UI components live here.
-// Each component should:
-//   - Have a single responsibility (< 150-200 lines per FRONTEND_GUIDELINES.md §3)
-//   - Define strict TypeScript interfaces for props (no `any`)
-//   - Use 'use client' only when interactivity requires it
-//
-// Example: export { default as Button } from './Button/Button';
+
+// Layout
+export { default as AppShell } from './layout/AppShell';
+export { default as Sidebar  } from './layout/Sidebar';
+export { default as Header   } from './layout/Header';
+
+// Dashboard
+export { default as KpiCard, KpiCardSkeleton } from './dashboard/KpiCard';
+export { default as KpiStrip                 } from './dashboard/KpiStrip';
+export { default as AnomalyList              } from './dashboard/AnomalyList';
+export { default as VolumeTrendChart         } from './dashboard/VolumeTrendChart';
+export { default as CollectionReceiptChart   } from './dashboard/CollectionReceiptChart';
+export { default as TopRiskFacilities        } from './dashboard/TopRiskFacilities';

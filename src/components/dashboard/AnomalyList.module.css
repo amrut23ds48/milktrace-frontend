@@ -1,0 +1,155 @@
+/* ── Anomaly List ─────────────────────────────────────────────────────────── */
+
+.panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease both;
+  animation-delay: 0.1s;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.panelTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.viewAll {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--brand-primary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background var(--transition-fast);
+}
+
+.viewAll:hover {
+  background: var(--brand-light);
+}
+
+/* ── Table ────────────────────────────────────────────────────────────────── */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  padding: var(--space-2) var(--space-4);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-surface-2);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr {
+  transition: background var(--transition-fast);
+  cursor: pointer;
+}
+
+.table tbody tr:hover {
+  background: var(--bg-surface-2);
+}
+
+/* ── Risk score cell ──────────────────────────────────────────────────────── */
+.riskCell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.riskBar {
+  width: 40px;
+  height: 4px;
+  background: var(--border-color);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.riskFill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.riskHigh     { background: var(--color-danger); }
+.riskMedium   { background: var(--color-warning); }
+.riskLow      { background: var(--color-normal); }
+
+/* ── Status badges ────────────────────────────────────────────────────────── */
+.statusOpen         { background: var(--color-danger-bg);  color: var(--color-danger-text); }
+.statusInvestigating{ background: var(--color-warning-bg); color: var(--color-warning-text); }
+.statusResolved     { background: var(--color-normal-bg);  color: var(--color-normal-text); }
+
+/* ── Time ago ─────────────────────────────────────────────────────────────── */
+.timeAgo {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* ── Empty & error ────────────────────────────────────────────────────────── */
+.emptyState, .errorState {
+  padding: var(--space-10);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.errorState { color: var(--color-danger); }
+
+.retryBtn {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.retryBtn:hover { background: var(--bg-surface-2); }
+
+/* ── Skeleton rows ────────────────────────────────────────────────────────── */
+.skelRow td > div {
+  height: 12px;
+  border-radius: 4px;
+}
+
+.skelRow:nth-child(1) td > div { width: 90%; }
+.skelRow:nth-child(2) td > div { width: 70%; }
+.skelRow:nth-child(3) td > div { width: 80%; }

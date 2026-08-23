@@ -1,0 +1,119 @@
+/* ── Shared Chart Panel ────────────────────────────────────────────────────── */
+
+.panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.4s ease both;
+  animation-delay: 0.15s;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.panelTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.panelBody {
+  padding: var(--space-5);
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Period toggle ────────────────────────────────────────────────────────── */
+.periodToggle {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+}
+
+.periodBtn {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-color);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.periodBtn:last-child { border-right: none; }
+.periodBtn:hover { background: var(--bg-surface-2); }
+
+.periodBtn.active {
+  background: var(--brand-primary);
+  color: #fff;
+}
+
+/* ── Loading / Error / Empty ──────────────────────────────────────────────── */
+.skelChart {
+  height: 220px;
+  border-radius: var(--border-radius-sm);
+}
+
+.errorState, .emptyState {
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  gap: var(--space-3);
+}
+
+.errorState { color: var(--color-danger); }
+
+.retryBtn {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--border-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.retryBtn:hover { background: var(--bg-surface-2); }
+
+/* ── Legend ───────────────────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  gap: var(--space-4);
+  padding: 0 var(--space-5) var(--space-4);
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}

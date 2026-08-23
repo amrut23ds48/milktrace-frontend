@@ -1,0 +1,54 @@
+/* ── Dashboard Page Layout ─────────────────────────────────────────────────── */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  animation: fadeIn 0.3s ease;
+}
+
+/* ── Chart row: 2 charts side by side ─────────────────────────────────────── */
+.chartRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+/* ── Bottom row: anomaly list + top risk ──────────────────────────────────── */
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .chartRow   { grid-template-columns: 1fr; }
+  .bottomRow  { grid-template-columns: 1fr; }
+}
+
+/* ── Page header ──────────────────────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.pageHeading {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.pageSubheading {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.lastUpdated {
+  font-size: 12px;
+  color: var(--text-muted);
+}

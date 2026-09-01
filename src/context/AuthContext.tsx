@@ -23,24 +23,25 @@ export const AuthContext = createContext<AuthContextValue>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const getInitialToken = (): string | null => {
-    if (typeof window === 'undefined') return null;
-    try { return localStorage.getItem(TOKEN_KEY); } catch { return null; }
-  };
-
-  const getInitialUser = (): AuthUser | null => {
-    if (typeof window === 'undefined') return null;
-    try {
-      const raw = localStorage.getItem(USER_KEY);
-      return raw ? (JSON.parse(raw) as AuthUser) : null;
-    } catch { return null; }
-  };
-
-  const [user, setUser]   = useState<AuthUser | null>(getInitialUser);
-  const [token, setToken] = useState<string | null>(getInitialToken);
-  // localStorage is read synchronously in initializers above; never in a loading state
-  const isLoading = false;
+  const [user, setUser]   = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  React.useEffect(() => {
+    try {
+      const storedToken = localStorage.getItem(TOKEN_KEY);
+      const storedUser = localStorage.getItem(USER_KEY);
+      if (storedToken && storedUser) {
+        setToken(storedToken);
+        setUser(JSON.parse(storedUser) as AuthUser);
+      }
+    } catch (e) {
+      console.error('Failed to restore session', e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const login = useCallback(async (identifier: string, password: string) => {
     // Temporary bypass to view frontend without backend

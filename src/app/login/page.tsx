@@ -99,6 +99,12 @@ export default function LoginPage() {
         <p className={styles.forgotPassword}>
           <a href="#forgot">Forgot password?</a>
         </p>
+
+        <div style={{ marginTop: '2rem', padding: '1rem', background: '#f8fafc', borderRadius: '8px', fontSize: '0.8rem', color: '#64748b' }}>
+          <strong>Dev Quick Login:</strong>
+          <br/>• Use <code>admin</code> to bypass as Super Admin.
+          <br/>• Use <code>village</code> to bypass as Village Admin.
+        </div>
       </div>
     </div>
   );

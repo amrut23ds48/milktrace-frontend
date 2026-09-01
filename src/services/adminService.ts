@@ -44,4 +44,12 @@ export const adminService = {
   createUser: (data: any) => apiFetch<any>('/users', { method: 'POST', body: JSON.stringify(data) }),
   updateUser: (id: string, data: any) => apiFetch<any>(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteUser: (id: string) => apiFetch<any>(`/users/${id}`, { method: 'DELETE' }),
+
+  getFarmers: () => apiFetch<any[]>('/farmers'),
+  createFarmer: (data: any) => apiFetch<any>('/farmers', { method: 'POST', body: JSON.stringify(data) }),
+  updateFarmer: (id: string, data: any) => apiFetch<any>(`/farmers/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteFarmer: (id: string) => apiFetch<any>(`/farmers/${id}`, { method: 'DELETE' }),
+
+  getAnimals: () => apiFetch<any[]>('/animals'),
+  updateAnimalBaselines: (id: string, data: any) => apiFetch<any>(`/animals/${id}/baseline`, { method: 'PUT', body: JSON.stringify(data) }),
 };

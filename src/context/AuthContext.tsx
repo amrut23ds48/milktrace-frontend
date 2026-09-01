@@ -48,7 +48,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (identifier === 'admin') {
       const data = {
         token: 'mock-jwt-token',
-        user: { id: '1', name: 'Admin User', role: { name: 'Super Admin' }, organization_id: '1' }
+        user: { id: '1', name: 'Admin User', role: { name: 'Super Admin' }, organization_id: '1', facility_id: null }
+      };
+      localStorage.setItem(TOKEN_KEY, data.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user as unknown as AuthUser);
+      router.push('/dashboard');
+      return;
+    }
+
+    if (identifier === 'village') {
+      const data = {
+        token: 'mock-jwt-token-village',
+        user: { id: '2', name: 'Village Admin', role: { name: 'Village Admin' }, organization_id: '1', facility_id: '1' }
       };
       localStorage.setItem(TOKEN_KEY, data.token);
       localStorage.setItem(USER_KEY, JSON.stringify(data.user));

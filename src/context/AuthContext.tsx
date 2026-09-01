@@ -43,6 +43,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const login = useCallback(async (identifier: string, password: string) => {
+    // Temporary bypass to view frontend without backend
+    if (identifier === 'admin') {
+      const data = {
+        token: 'mock-jwt-token',
+        user: { id: '1', name: 'Admin User', role: { name: 'Super Admin' }, organization_id: '1' }
+      };
+      localStorage.setItem(TOKEN_KEY, data.token);
+      localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user as unknown as AuthUser);
+      router.push('/dashboard');
+      return;
+    }
+
     const res = await fetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

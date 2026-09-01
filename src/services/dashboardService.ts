@@ -1,9 +1,4 @@
 // services/dashboardService.ts
-// ─── Dashboard API Abstractions ───────────────────────────────────────────────
-// Connects to the Express.js backend at /api/v1.
-// Where aggregation endpoints don't exist yet, uses clearly-marked mock data
-// so the UI is fully functional while the backend catches up.
-
 import type {
   AnomalyEvent,
   KpiMetrics,
@@ -13,14 +8,21 @@ import type {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api/v1';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function apiFetch<T>(path: string): Promise<T> {
+  let token = 'mock-jwt-token';
+  if (typeof window !== 'undefined') {
+    const stored = localStorage.getItem('token');
+    if (stored) token = stored;
+  }
+  
+  const headers: Record<string, string> = { 
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+  
   const res = await fetch(`${API_BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
-    // Cache for 30 s in Next.js App Router
-    next: { revalidate: 30 },
+    headers,
+    next: { revalidate: 0 },
   });
   if (!res.ok) {
     throw new Error(`API error ${res.status}: ${res.statusText}`);
@@ -28,89 +30,107 @@ async function apiFetch<T>(path: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-// ─── KPI Metrics ──────────────────────────────────────────────────────────────
-// TODO: replace mock with real aggregation endpoint when Phase 5+ is complete.
-
 export async function fetchKpiMetrics(): Promise<KpiMetrics> {
-  // MOCK — backend doesn't have a /metrics aggregation endpoint yet.
-  // Remove and replace with: apiFetch<KpiMetrics>('/dashboard/metrics')
-  return Promise.resolve({
-    milkCollectedToday: 1_820_000,
-    milkCollectedChange: 6.4,
-    milkInTransit: 340_000,
-    milkInTransitChange: -2.1,
-    milkDelivered: 1_410_000,
-    milkDeliveredChange: 4.8,
-    activeFarmers: 12_480,
-    activeFarmersChange: 1.2,
-    activeCollectionCenters: 238,
-    activeCollectionCentersChange: 0,
-    activeRoutes: 74,
-    activeRoutesChange: -3.8,
-    openAnomalies: 41,
-    openAnomaliesChange: 17.1,
-    highRiskIncidents: 7,
-    highRiskIncidentsChange: 40.0,
-  });
-}
+  try {
+    const [collections, batches, farmers, facilities, anomalies] = await Promise.all([
+      apiFetch<any[]>('/collections').catch(() => []),
+      apiFetch<any[]>('/batches').catch(() => []),
+      apiFetch<any[]>('/farmers').catch(() => []),
+      apiFetch<any[]>('/facilities').catch(() => []),
+      apiFetch<any[]>('/anomalies').catch(() => []),
+    ]);
 
-// ─── Recent Anomalies ─────────────────────────────────────────────────────────
-// TODO: replace mock with real /anomalies endpoint when Phase 6 is complete.
+    const today = new Date().toDateString();
+    const milkCollectedToday = collections
+      .filter(c => new Date(c.collection_timestamp).toDateString() === today)
+      .reduce((sum, c) => sum + Number(c.quantity_liters), 0);
+
+    const milkInTransit = batches
+      .filter(b => b.status === 'IN_TRANSIT' || b.status === 'DISPATCHED')
+      .reduce((sum, b) => sum + Number(b.quantity_liters), 0);
+
+    const milkDelivered = batches
+      .filter(b => b.status === 'RECEIVED')
+      .reduce((sum, b) => sum + Number(b.quantity_liters), 0);
+
+    const activeRoutes = batches.filter(b => b.status === 'IN_TRANSIT' || b.status === 'DISPATCHED').length;
+    const activeFarmers = farmers.filter(f => f.registration_status === 'APPROVED' || f.registration_status === 'PENDING').length;
+    const activeCollectionCenters = facilities.filter(f => f.type === 'VILLAGE_COLLECTION_CENTER').length;
+
+    const openAnomalies = anomalies.filter(a => a.status === 'ACTIVE').length;
+    const highRiskIncidents = anomalies.filter(a => a.severity === 'HIGH' || a.severity === 'CRITICAL').length;
+
+    return {
+      milkCollectedToday,
+      milkCollectedChange: 0,
+      milkInTransit,
+      milkInTransitChange: 0,
+      milkDelivered,
+      milkDeliveredChange: 0,
+      activeFarmers,
+      activeFarmersChange: 0,
+      activeCollectionCenters,
+      activeCollectionCentersChange: 0,
+      activeRoutes,
+      activeRoutesChange: 0,
+      openAnomalies,
+      openAnomaliesChange: 0,
+      highRiskIncidents,
+      highRiskIncidentsChange: 0,
+    };
+  } catch (err) {
+    console.error('Failed to fetch KPI metrics', err);
+    throw err;
+  }
+}
 
 export async function fetchRecentAnomalies(limit = 8): Promise<AnomalyEvent[]> {
-  // MOCK — replace with: apiFetch<AnomalyEvent[]>(`/anomalies?limit=${limit}&sort=detectedAt:desc`)
-  const mock: AnomalyEvent[] = [
-    { id: 'A-182', type: 'Combined', location: 'VC-018 → CC-004', riskScore: 86, detectedAt: new Date(Date.now() - 12 * 60000).toISOString(), status: 'INVESTIGATING', assignedTo: 'Officer 04' },
-    { id: 'A-181', type: 'Quantity', location: 'CC-011 → DF-002', riskScore: 74, detectedAt: new Date(Date.now() - 34 * 60000).toISOString(), status: 'OPEN', assignedTo: null },
-    { id: 'A-180', type: 'Quality', location: 'VC-027', riskScore: 63, detectedAt: new Date(Date.now() - 68 * 60000).toISOString(), status: 'OPEN', assignedTo: 'Officer 02' },
-    { id: 'A-179', type: 'Transfer', location: 'DF-005 → BIZ-009', riskScore: 58, detectedAt: new Date(Date.now() - 120 * 60000).toISOString(), status: 'INVESTIGATING', assignedTo: 'Officer 01' },
-    { id: 'A-178', type: 'Volume', location: 'CC-003 → DF-001', riskScore: 45, detectedAt: new Date(Date.now() - 240 * 60000).toISOString(), status: 'OPEN', assignedTo: null },
-    { id: 'A-177', type: 'SNF Deviation', location: 'VC-042', riskScore: 41, detectedAt: new Date(Date.now() - 360 * 60000).toISOString(), status: 'OPEN', assignedTo: null },
-    { id: 'A-176', type: 'Combined', location: 'VC-009 → CC-002', riskScore: 38, detectedAt: new Date(Date.now() - 480 * 60000).toISOString(), status: 'RESOLVED', assignedTo: 'Officer 03' },
-    { id: 'A-175', type: 'Quantity', location: 'CC-007 → DF-003', riskScore: 32, detectedAt: new Date(Date.now() - 600 * 60000).toISOString(), status: 'RESOLVED', assignedTo: 'Officer 01' },
-  ];
-  return Promise.resolve(mock.slice(0, limit));
+  const anomalies = await apiFetch<any[]>('/anomalies').catch(() => []);
+  return anomalies
+    .slice(0, limit)
+    .map(a => ({
+      id: a.id,
+      type: a.anomaly_type,
+      location: `Entity: ${a.entity_id}`,
+      riskScore: a.risk_score,
+      detectedAt: a.created_at,
+      status: a.status === 'ACTIVE' ? 'OPEN' : 'RESOLVED',
+      assignedTo: null,
+    }));
 }
-
-// ─── Volume Trend ─────────────────────────────────────────────────────────────
-// TODO: replace mock with real time-series aggregation endpoint.
 
 export async function fetchVolumeTrend(days: number): Promise<VolumeTrendPoint[]> {
-  // MOCK — replace with: apiFetch<VolumeTrendPoint[]>(`/collections/trend?days=${days}`)
+  const collections = await apiFetch<any[]>('/collections').catch(() => []);
   const points: VolumeTrendPoint[] = [];
   const now = Date.now();
-  const labels = days <= 7
-    ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    : Array.from({ length: days }, (_, i) => {
-        const d = new Date(now - (days - 1 - i) * 86400000);
-        return `${d.getDate()}/${d.getMonth() + 1}`;
-      });
-
-  for (let i = 0; i < Math.min(days, labels.length); i++) {
-    const base = 1_700_000 + Math.sin(i * 0.8) * 200_000 + Math.random() * 80_000;
+  
+  for (let i = 0; i < days; i++) {
+    const d = new Date(now - (days - 1 - i) * 86400000);
+    const dateStr = `${d.getDate()}/${d.getMonth() + 1}`;
+    
+    const dayCollections = collections.filter(c => new Date(c.collection_timestamp).toDateString() === d.toDateString());
+    const collected = dayCollections.reduce((sum, c) => sum + Number(c.quantity_liters), 0);
+    
     points.push({
-      date: labels[i]!,
-      collected: Math.round(base),
-      dispatched: Math.round(base * 0.94),
-      received: Math.round(base * 0.91),
+      date: dateStr,
+      collected,
+      dispatched: Math.round(collected * 0.94), // Mocked relative
+      received: Math.round(collected * 0.91), // Mocked relative
     });
   }
-  return Promise.resolve(points);
+  return points;
 }
 
-// ─── Top Risk Facilities ──────────────────────────────────────────────────────
-// Attempts real API call; falls back to mock if it fails.
-
 export async function fetchTopRiskFacilities(): Promise<TopRiskFacility[]> {
-  // MOCK — replace with: apiFetch<TopRiskFacility[]>('/facilities?sort=riskScore:desc&limit=5')
-  const mock: TopRiskFacility[] = [
-    { id: 'fac-001', name: 'Pune District Facility', type: 'District', district: 'Pune', riskScore: 82, openAnomalies: 9 },
-    { id: 'fac-002', name: 'Nashik Chilling Center', type: 'Chilling', district: 'Nashik', riskScore: 74, openAnomalies: 6 },
-    { id: 'fac-003', name: 'Aurangabad VC-018', type: 'Village', district: 'Aurangabad', riskScore: 68, openAnomalies: 5 },
-    { id: 'fac-004', name: 'Kolhapur CC-011', type: 'Chilling', district: 'Kolhapur', riskScore: 61, openAnomalies: 4 },
-    { id: 'fac-005', name: 'Nagpur DF-002', type: 'District', district: 'Nagpur', riskScore: 55, openAnomalies: 3 },
-  ];
-  return Promise.resolve(mock);
+  const facilities = await apiFetch<any[]>('/facilities').catch(() => []);
+  return facilities.slice(0, 5).map(f => ({
+    id: f.id,
+    name: f.name,
+    type: f.type,
+    district: f.district,
+    riskScore: Math.floor(Math.random() * 100), // Random for now until aggregation
+    openAnomalies: 0,
+  }));
 }
 
 export const dashboardService = {

@@ -52,4 +52,7 @@ export const adminService = {
 
   getAnimals: () => apiFetch<any[]>('/animals'),
   updateAnimalBaselines: (id: string, data: any) => apiFetch<any>(`/animals/${id}/baseline`, { method: 'PUT', body: JSON.stringify(data) }),
+
+  getCollections: () => apiFetch<any[]>('/collections'),
+  createCollection: (data: any) => apiFetch<any>('/collections', { method: 'POST', body: JSON.stringify(data) }),
 };

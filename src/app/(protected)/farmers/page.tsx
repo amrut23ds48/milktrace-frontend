@@ -13,7 +13,7 @@ const MAHARASHTRA_DISTRICTS = [
 export default function FarmersPage() {
   const { user } = useAuth();
   // We identify Village Admin strictly by role name in our mock setup
-  const isVillageAdmin = user?.role?.name === 'Village Admin';
+  const isVillageAdmin = user?.role === 'Village Admin';
 
   const [farmers, setFarmers] = useState<any[]>([]);
   const [facilities, setFacilities] = useState<any[]>([]);

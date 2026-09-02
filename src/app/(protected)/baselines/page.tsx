@@ -9,7 +9,7 @@ const ITEMS_PER_PAGE = 10;
 
 export default function AnimalBaselinesPage() {
   const { user } = useAuth();
-  const isVillageAdmin = user?.role?.name === 'Village Admin';
+  const isVillageAdmin = user?.role === 'Village Admin';
 
   const [animals, setAnimals] = useState<any[]>([]);
   const [facilities, setFacilities] = useState<any[]>([]);

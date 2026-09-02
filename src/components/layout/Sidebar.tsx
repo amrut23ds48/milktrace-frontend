@@ -5,6 +5,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '../../hooks/useAuth';
 import styles from './Sidebar.module.css';
 
 interface NavItem {
@@ -36,6 +37,7 @@ const adminNav: NavItem[] = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user, logout } = useAuth();
 
   return (
     <aside className={styles.sidebar} aria-label="Primary navigation">
@@ -90,7 +92,27 @@ export default function Sidebar() {
 
       {/* Footer */}
       <div className={styles.sidebarFooter}>
-        <p className={styles.version}>MilkTrace v0.1.0 · Phase 7</p>
+        {/* User info */}
+        {user && (
+          <div className={styles.userCard}>
+            <div className={styles.userAvatar}>
+              {user.name?.charAt(0).toUpperCase() ?? '?'}
+            </div>
+            <div className={styles.userInfo}>
+              <div className={styles.userName}>{user.name}</div>
+              <div className={styles.userRole}>{typeof user.role === 'string' ? user.role : (user.role as any)?.name ?? 'User'}</div>
+            </div>
+          </div>
+        )}
+        <button
+          id="sidebar-logout-btn"
+          className={styles.logoutBtn}
+          onClick={logout}
+          title="Sign out"
+        >
+          <span aria-hidden="true">⎋</span> Sign Out
+        </button>
+        <p className={styles.version}>MilkTrace v0.1.0 · Phase 8</p>
       </div>
     </aside>
   );

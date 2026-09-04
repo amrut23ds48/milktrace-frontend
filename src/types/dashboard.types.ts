@@ -36,11 +36,19 @@ export interface KpiMetrics {
 export interface AnomalyEvent {
   id: string;
   type: string;
-  location: string;
+  entityType?: string;
+  entityId?: string;
+  location: string;         // kept for backwards compat
+  locationLabel?: string;   // human-readable e.g. "Village Center 3 → Chilling Center 1"
+  district?: string | null;
+  severity?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   riskScore: number;
-  detectedAt: string;   // ISO date string
+  detectedAt: string;       // ISO date string
   status: AnomalyStatus;
   assignedTo: string | null;
+  assignedToId?: string | null;
+  investigationId?: string | null;
+  conclusion?: string | null;
 }
 
 /** A single data point on the Volume Trend line chart */

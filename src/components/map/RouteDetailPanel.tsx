@@ -87,7 +87,7 @@ export default function RouteDetailPanel({ route, onClose }: RouteDetailPanelPro
             </div>
             {lossL !== null && Math.abs(lossL) > 0 && (
               <div className={styles.metric} style={{ gridColumn: '1/-1' }}>
-                <div className={styles.metricLabel}>{lossL > 0 ? 'Loss' : 'Increase'}</div>
+                <div className={styles.metricLabel}>{lossL > 0 ? 'Volume Loss' : 'Volume Increase'}</div>
                 <div className={`${styles.metricValue} ${styles.lossValue}`}>
                   {formatL(Math.abs(lossL))}
                 </div>
@@ -95,6 +95,48 @@ export default function RouteDetailPanel({ route, onClose }: RouteDetailPanelPro
               </div>
             )}
           </div>
+
+          {/* Quality Metrics */}
+          {route.receivedL > 0 && route.dispatchedFat !== undefined && (
+            <div>
+              <div className={styles.sectionTitle}>Quality Metrics (FAT & SNF)</div>
+              <div className={styles.metricsGrid}>
+                {/* FAT */}
+                <div className={styles.metric}>
+                  <div className={styles.metricLabel}>Dispatched FAT</div>
+                  <div className={styles.metricValue}>{route.dispatchedFat}%</div>
+                </div>
+                <div className={styles.metric}>
+                  <div className={styles.metricLabel}>Received FAT</div>
+                  <div className={`${styles.metricValue} ${route.receivedFat! < route.dispatchedFat ? styles.lossValue : ''}`}>
+                    {route.receivedFat}%
+                  </div>
+                  {route.receivedFat! !== route.dispatchedFat && (
+                    <div className={styles.metricSub}>
+                      {route.receivedFat! > route.dispatchedFat ? '+' : ''}{(route.receivedFat! - route.dispatchedFat).toFixed(2)}%
+                    </div>
+                  )}
+                </div>
+                
+                {/* SNF */}
+                <div className={styles.metric}>
+                  <div className={styles.metricLabel}>Dispatched SNF</div>
+                  <div className={styles.metricValue}>{route.dispatchedSnf}%</div>
+                </div>
+                <div className={styles.metric}>
+                  <div className={styles.metricLabel}>Received SNF</div>
+                  <div className={`${styles.metricValue} ${route.receivedSnf! < route.dispatchedSnf! ? styles.lossValue : ''}`}>
+                    {route.receivedSnf}%
+                  </div>
+                  {route.receivedSnf! !== route.dispatchedSnf! && (
+                    <div className={styles.metricSub}>
+                      {route.receivedSnf! > route.dispatchedSnf! ? '+' : ''}{(route.receivedSnf! - route.dispatchedSnf!).toFixed(2)}%
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Risk Score */}
           <div className={styles.riskSection}>

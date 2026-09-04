@@ -85,18 +85,26 @@ export async function fetchKpiMetrics(): Promise<KpiMetrics> {
 }
 
 export async function fetchRecentAnomalies(limit = 8): Promise<AnomalyEvent[]> {
-  const anomalies = await apiFetch<any[]>('/anomalies').catch(() => []);
-  return anomalies
-    .slice(0, limit)
-    .map(a => ({
-      id: a.id,
-      type: a.anomaly_type,
-      location: `Entity: ${a.entity_id}`,
-      riskScore: a.risk_score,
-      detectedAt: a.created_at,
-      status: a.status === 'ACTIVE' ? 'OPEN' : 'RESOLVED',
-      assignedTo: null,
-    }));
+  // New API returns { data, total, page, limit, totalPages }
+  const response = await apiFetch<{ data: any[] } | any[]>(`/anomalies?limit=${limit}&page=1`).catch(() => ({ data: [] }));
+  const items = Array.isArray(response) ? response : (response as { data: any[] }).data ?? [];
+  return items.map(a => ({
+    id: a.id,
+    type: a.type ?? a.anomaly_type,
+    entityType: a.entityType ?? a.entity_type,
+    entityId: a.entityId ?? a.entity_id,
+    location: a.locationLabel ?? `${a.entity_type}: ${a.entity_id}`,
+    locationLabel: a.locationLabel ?? `${a.entity_type}: ${a.entity_id}`,
+    district: a.district ?? null,
+    severity: a.severity,
+    riskScore: a.riskScore ?? a.risk_score,
+    detectedAt: a.detectedAt ?? a.created_at,
+    status: a.status === 'ACTIVE' ? 'OPEN' : (a.status ?? 'OPEN'),
+    assignedTo: a.assignedTo ?? null,
+    assignedToId: a.assignedToId ?? null,
+    investigationId: a.investigationId ?? null,
+    conclusion: a.conclusion ?? null,
+  }));
 }
 
 export async function fetchVolumeTrend(days: number): Promise<VolumeTrendPoint[]> {

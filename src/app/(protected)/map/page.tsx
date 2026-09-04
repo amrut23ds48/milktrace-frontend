@@ -96,7 +96,7 @@ export default function MapPage() {
       <div style={{ position: 'absolute', top: 36, left: 0, right: 0, zIndex: 999 }}>
         <MapFilterBar
           filters={filters}
-          districts={[]}
+          districts={districtStats.data?.map(d => d.district) || []}
           onChange={updateFilter}
           onReset={resetFilters}
         />

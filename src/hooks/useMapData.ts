@@ -6,6 +6,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { mapService } from '../services/mapService';
 import type { DistrictStats, MapFacility, MapRoute } from '../types/map.types';
+import { useAuth } from './useAuth';
 
 interface AsyncState<T> {
   data: T | null;
@@ -32,22 +33,25 @@ function makeInit<T>(): AsyncState<T> {
 }
 
 export function useMapFacilities() {
+  const { token } = useAuth();
   const [state, setState] = useState<AsyncState<MapFacility[]>>(makeInit);
-  const refetch = useCallback(() => { void runFetch(mapService.fetchMapFacilities, setState); }, []);
-  useEffect(() => { refetch(); }, [refetch]);
+  const refetch = useCallback(() => { void runFetch(() => mapService.fetchMapFacilities(token), setState); }, [token]);
+  useEffect(() => { if(token) refetch(); }, [refetch, token]);
   return { ...state, refetch };
 }
 
 export function useMapRoutes() {
+  const { token } = useAuth();
   const [state, setState] = useState<AsyncState<MapRoute[]>>(makeInit);
-  const refetch = useCallback(() => { void runFetch(mapService.fetchMapRoutes, setState); }, []);
-  useEffect(() => { refetch(); }, [refetch]);
+  const refetch = useCallback(() => { void runFetch(() => mapService.fetchMapRoutes(token), setState); }, [token]);
+  useEffect(() => { if(token) refetch(); }, [refetch, token]);
   return { ...state, refetch };
 }
 
 export function useDistrictStats() {
+  const { token } = useAuth();
   const [state, setState] = useState<AsyncState<DistrictStats[]>>(makeInit);
-  const refetch = useCallback(() => { void runFetch(mapService.fetchDistrictStats, setState); }, []);
-  useEffect(() => { refetch(); }, [refetch]);
+  const refetch = useCallback(() => { void runFetch(() => mapService.fetchDistrictStats(token), setState); }, [token]);
+  useEffect(() => { if(token) refetch(); }, [refetch, token]);
   return { ...state, refetch };
 }

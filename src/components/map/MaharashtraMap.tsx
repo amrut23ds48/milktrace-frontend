@@ -125,6 +125,16 @@ export default function MaharashtraMap({
   const visibleRoutes = routes.filter((r) => {
     if (!layers.routes) return false;
     if (filters.routeStatus !== 'ALL' && r.status !== filters.routeStatus) return false;
+    
+    // Filter by district
+    if (filters.district !== 'ALL') {
+      const fromFac = facilityIndex.get(r.fromFacilityId);
+      const toFac = facilityIndex.get(r.toFacilityId);
+      if (fromFac?.district !== filters.district && toFac?.district !== filters.district) {
+        return false;
+      }
+    }
+
     if (filters.riskBand !== 'ALL') {
       const band =
         r.riskScore >= 80 ? 'CRITICAL' :
@@ -157,6 +167,7 @@ export default function MaharashtraMap({
       color: '#94a3b8',
       weight: 1,
       opacity: 0.6,
+      interactive: false,
     };
   };
 

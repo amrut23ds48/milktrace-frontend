@@ -142,10 +142,21 @@ export default function RouteDetailPanel({ route, onClose }: RouteDetailPanelPro
               <button id="action-view-to-facility" className={`${styles.actionBtn} ${styles.actionSecondary}`}>
                 🏭 View {route.toName}
               </button>
-              {(route.status === 'ANOMALOUS' || route.status === 'INVESTIGATING') && (
-                <button id="action-view-investigation" className={`${styles.actionBtn} ${styles.actionSecondary}`}>
-                  📋 View Investigation
-                </button>
+              {(route.status === 'ANOMALOUS' || route.status === 'INVESTIGATING') && route.anomalyId && (
+                <div style={{ marginTop: '12px', padding: '12px', background: 'var(--bg-card)', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '4px' }}>Anomaly ID</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <code style={{ fontSize: '13px', color: 'var(--text-main)', background: 'var(--bg-body)', padding: '4px 8px', borderRadius: '4px', flex: 1, wordBreak: 'break-all' }}>
+                      {route.anomalyId}
+                    </code>
+                    <button 
+                      onClick={() => navigator.clipboard.writeText(route.anomalyId!)}
+                      style={{ padding: '4px 8px', background: 'var(--primary-color)', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
               )}
             </div>
           </div>

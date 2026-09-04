@@ -42,6 +42,7 @@ export interface MapRoute {
   alerts: string[];
   lastTransferAt: string;      // ISO
   batchId?: string;
+  anomalyId?: string;
 }
 
 /** Stats per district — used to colour the district GeoJSON polygons */

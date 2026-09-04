@@ -20,7 +20,7 @@ const MAHARASHTRA_DISTRICTS = [
   'Washim','Yavatmal',
 ];
 
-export default function MapFilterBar({ filters, onChange, onReset }: MapFilterBarProps) {
+export default function MapFilterBar({ filters, districts, onChange, onReset }: MapFilterBarProps) {
   const isFiltered =
     filters.routeStatus !== 'ALL' ||
     filters.riskBand !== 'ALL' ||
@@ -70,7 +70,7 @@ export default function MapFilterBar({ filters, onChange, onReset }: MapFilterBa
         aria-label="District filter"
       >
         <option value="ALL">All Districts</option>
-        {MAHARASHTRA_DISTRICTS.map((d) => (
+        {districts.map((d) => (
           <option key={d} value={d}>{d}</option>
         ))}
       </select>

@@ -56,10 +56,10 @@ export default function Sidebar() {
           <div className={styles.navSectionLabel}>Operations</div>
           {primaryNav.map((item) => {
             // Filter logic
-            if (user?.role === 'Village Admin' && !['Milk Flow', 'Farmers'].includes(item.label)) {
+            if (user?.role === 'Village Admin' && !['Dashboard', 'Milk Flow', 'Farmers', 'Batches'].includes(item.label)) {
               return null;
             }
-            if (user?.role === 'Chilling Admin' && !['Batches', 'Facilities'].includes(item.label)) {
+            if (user?.role === 'Chilling Admin' && !['Dashboard', 'Batches', 'Facilities'].includes(item.label)) {
               return null;
             }
             const superAdminOnlyItems = ['Map', 'Anomalies', 'Analytics', 'Audit Logs'];

@@ -61,4 +61,8 @@ export const adminService = {
   getDailySummary: (facilityId: string, date: string) => apiFetch<any>(`/collections/summary/daily?facility_id=${facilityId}&date=${date}`),
   createCollection: (data: any) => apiFetch<any>('/collections', { method: 'POST', body: JSON.stringify(data) }),
   cancelCollection: (id: string, reason: string) => apiFetch<any>(`/collections/${id}/cancel`, { method: 'PUT', body: JSON.stringify({ reason }) }),
+
+  getBatches: () => apiFetch<any[]>('/batches'),
+  createBatch: (data: any) => apiFetch<any>('/batches', { method: 'POST', body: JSON.stringify(data) }),
+  createTransfer: (data: any) => apiFetch<any>('/transfers', { method: 'POST', body: JSON.stringify(data) }),
 };

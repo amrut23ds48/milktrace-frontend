@@ -11,7 +11,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/api/v
 async function apiFetch<T>(path: string): Promise<T> {
   let token = 'mock-jwt-token';
   if (typeof window !== 'undefined') {
-    const stored = localStorage.getItem('token');
+    const stored = localStorage.getItem('milktrace_token'); // was 'token' — now matches AuthContext
     if (stored) token = stored;
   }
   

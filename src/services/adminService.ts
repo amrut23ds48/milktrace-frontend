@@ -53,6 +53,12 @@ export const adminService = {
   getAnimals: () => apiFetch<any[]>('/animals'),
   updateAnimalBaselines: (id: string, data: any) => apiFetch<any>(`/animals/${id}/baseline`, { method: 'PUT', body: JSON.stringify(data) }),
 
-  getCollections: () => apiFetch<any[]>('/collections'),
+  getCollections: (params?: { facility_id?: string; date?: string; session?: string; status?: string }) => {
+    const qs = params ? '?' + new URLSearchParams(params as any).toString() : '';
+    return apiFetch<any[]>(`/collections${qs}`);
+  },
+  getCollectionById: (id: string) => apiFetch<any>(`/collections/${id}`),
+  getDailySummary: (facilityId: string, date: string) => apiFetch<any>(`/collections/summary/daily?facility_id=${facilityId}&date=${date}`),
   createCollection: (data: any) => apiFetch<any>('/collections', { method: 'POST', body: JSON.stringify(data) }),
+  cancelCollection: (id: string, reason: string) => apiFetch<any>(`/collections/${id}/cancel`, { method: 'PUT', body: JSON.stringify({ reason }) }),
 };

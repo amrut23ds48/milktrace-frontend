@@ -54,40 +54,56 @@ export default function Sidebar() {
       <nav className={styles.nav}>
         <div className={styles.navSection}>
           <div className={styles.navSectionLabel}>Operations</div>
-          {primaryNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              id={`nav-${item.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
-              className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
-              aria-current={pathname === item.href ? 'page' : undefined}
-            >
-              <span className={styles.navIcon} aria-hidden="true">{item.icon}</span>
-              {item.label}
-              {item.badge !== undefined && (
-                <span className={styles.navBadge} aria-label={`${item.badge} open`}>
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          ))}
+          {primaryNav.map((item) => {
+            // Filter logic
+            if (user?.role === 'Village Admin' && !['Milk Flow', 'Farmers'].includes(item.label)) {
+              return null;
+            }
+            if (user?.role === 'Chilling Admin' && !['Batches', 'Facilities'].includes(item.label)) {
+              return null;
+            }
+            const superAdminOnlyItems = ['Map', 'Anomalies', 'Analytics', 'Audit Logs'];
+            if (superAdminOnlyItems.includes(item.label) && user?.role !== 'Super Admin') {
+              return null;
+            }
+            
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                id={`nav-${item.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
+                className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
+                aria-current={pathname === item.href ? 'page' : undefined}
+              >
+                <span className={styles.navIcon} aria-hidden="true">{item.icon}</span>
+                {item.label}
+                {item.badge !== undefined && (
+                  <span className={styles.navBadge} aria-label={`${item.badge} open`}>
+                    {item.badge}
+                  </span>
+                )}
+              </Link>
+            )
+          })}
         </div>
 
-        <div className={styles.navSection}>
-          <div className={styles.navSectionLabel}>Super Admin</div>
-          {adminNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              id={`nav-${item.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
-              className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
-              aria-current={pathname === item.href ? 'page' : undefined}
-            >
-              <span className={styles.navIcon} aria-hidden="true">{item.icon}</span>
-              {item.label}
-            </Link>
-          ))}
-        </div>
+        {user?.role === 'Super Admin' && (
+          <div className={styles.navSection}>
+            <div className={styles.navSectionLabel}>Super Admin</div>
+            {adminNav.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                id={`nav-${item.label.toLowerCase().replace(/[^a-z]/g, '-')}`}
+                className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
+                aria-current={pathname === item.href ? 'page' : undefined}
+              >
+                <span className={styles.navIcon} aria-hidden="true">{item.icon}</span>
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        )}
       </nav>
 
       {/* Footer */}

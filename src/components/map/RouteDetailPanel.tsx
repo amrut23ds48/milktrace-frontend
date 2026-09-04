@@ -85,13 +85,13 @@ export default function RouteDetailPanel({ route, onClose }: RouteDetailPanelPro
                 {route.receivedL > 0 ? formatL(route.receivedL) : <span style={{ color: 'var(--text-muted)', fontSize: 14 }}>In transit</span>}
               </div>
             </div>
-            {lossL !== null && (
+            {lossL !== null && Math.abs(lossL) > 0 && (
               <div className={styles.metric} style={{ gridColumn: '1/-1' }}>
-                <div className={styles.metricLabel}>Loss</div>
+                <div className={styles.metricLabel}>{lossL > 0 ? 'Loss' : 'Increase'}</div>
                 <div className={`${styles.metricValue} ${styles.lossValue}`}>
-                  {formatL(lossL)}
+                  {formatL(Math.abs(lossL))}
                 </div>
-                <div className={styles.metricSub}>{lossPct}% of dispatched volume</div>
+                <div className={styles.metricSub}>{Math.abs(Number(lossPct))}% of dispatched volume</div>
               </div>
             )}
           </div>

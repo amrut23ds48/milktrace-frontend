@@ -72,6 +72,7 @@
   align-items: center;
   justify-content: center;
   transition: background var(--transition-fast);
+  margin-top: 8px;
 }
 
 .closeBtn:hover { background: var(--border-color); }

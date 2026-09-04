@@ -124,9 +124,11 @@ export default function MapPage() {
       </div>
 
       {/* Layer controls — top right */}
-      <div style={{ position: 'absolute', top: 80, right: 0, zIndex: 1001 }}>
-        <MapLayerControls layers={layers} onToggle={toggleLayer} />
-      </div>
+      {!selectedRoute && (
+        <div style={{ position: 'absolute', top: 80, right: 0, zIndex: 1001 }}>
+          <MapLayerControls layers={layers} onToggle={toggleLayer} />
+        </div>
+      )}
 
       {/* Legend — bottom left */}
       <div style={{ position: 'absolute', bottom: 0, left: 0, zIndex: 1001 }}>

@@ -32,36 +32,59 @@ async function apiFetch<T>(path: string): Promise<T> {
 
 export async function fetchKpiMetrics(): Promise<KpiMetrics> {
   try {
-    const [collections, batches, farmers, facilities, anomalies] = await Promise.all([
+    // Build today's date in ISO format (YYYY-MM-DD) in the user's local timezone
+    // Then also pass it as a query param so the server filters server-side (avoids UTC vs IST drift)
+    const todayISO = new Date().toLocaleDateString('en-CA'); // yields YYYY-MM-DD in local tz
+
+    const [todayCollections, allCollections, batches, farmers, facilities, anomalies] = await Promise.all([
+      apiFetch<any[]>(`/collections?date=${todayISO}`).catch(() => []),
       apiFetch<any[]>('/collections').catch(() => []),
       apiFetch<any[]>('/batches').catch(() => []),
       apiFetch<any[]>('/farmers').catch(() => []),
       apiFetch<any[]>('/facilities').catch(() => []),
-      apiFetch<any[]>('/anomalies').catch(() => []),
+      // API returns { data, total, ... } — extract the array
+      apiFetch<{ data: any[] } | any[]>('/anomalies?limit=500').catch(() => ({ data: [] })),
     ]);
 
-    const today = new Date().toDateString();
-    const milkCollectedToday = collections
-      .filter(c => new Date(c.collection_timestamp).toDateString() === today)
-      .reduce((sum, c) => sum + Number(c.quantity_liters), 0);
+    // Use server-filtered today collections for the KPI
+    const milkCollectedToday = (Array.isArray(todayCollections) ? todayCollections : [])
+      .reduce((sum: number, c: any) => sum + Number(c.quantity_liters ?? 0), 0);
 
-    const milkInTransit = batches
-      .filter(b => b.status === 'IN_TRANSIT' || b.status === 'DISPATCHED')
-      .reduce((sum, b) => sum + Number(b.quantity_liters), 0);
+    // Fallback: if server didn't filter (returned all), do client-side date match as safety net
+    const milkCollectedTodayFallback = (Array.isArray(allCollections) ? allCollections : [])
+      .filter((c: any) => {
+        const ts = c.collection_timestamp ?? c.created_at;
+        return ts && new Date(ts).toLocaleDateString('en-CA') === todayISO;
+      })
+      .reduce((sum: number, c: any) => sum + Number(c.quantity_liters ?? 0), 0);
 
-    const milkDelivered = batches
-      .filter(b => b.status === 'RECEIVED')
-      .reduce((sum, b) => sum + Number(b.quantity_liters), 0);
+    const finalMilkToday = milkCollectedToday > 0 ? milkCollectedToday : milkCollectedTodayFallback;
 
-    const activeRoutes = batches.filter(b => b.status === 'IN_TRANSIT' || b.status === 'DISPATCHED').length;
-    const activeFarmers = farmers.filter(f => f.registration_status === 'APPROVED' || f.registration_status === 'PENDING').length;
-    const activeCollectionCenters = facilities.filter(f => f.type === 'VILLAGE_COLLECTION_CENTER').length;
+    const milkInTransit = (Array.isArray(batches) ? batches : [])
+      .filter((b: any) => b.status === 'IN_TRANSIT' || b.status === 'DISPATCHED')
+      .reduce((sum: number, b: any) => sum + Number(b.quantity_liters ?? 0), 0);
 
-    const openAnomalies = anomalies.filter(a => a.status === 'ACTIVE').length;
-    const highRiskIncidents = anomalies.filter(a => a.severity === 'HIGH' || a.severity === 'CRITICAL').length;
+    const milkDelivered = (Array.isArray(batches) ? batches : [])
+      .filter((b: any) => b.status === 'RECEIVED')
+      .reduce((sum: number, b: any) => sum + Number(b.quantity_liters ?? 0), 0);
+
+    const activeRoutes = (Array.isArray(batches) ? batches : [])
+      .filter((b: any) => b.status === 'IN_TRANSIT' || b.status === 'DISPATCHED').length;
+    const activeFarmers = (Array.isArray(farmers) ? farmers : [])
+      .filter((f: any) => f.registration_status === 'APPROVED' || f.registration_status === 'PENDING').length;
+    const activeCollectionCenters = (Array.isArray(facilities) ? facilities : [])
+      .filter((f: any) => f.type === 'VILLAGE_COLLECTION_CENTER').length;
+
+    // Unwrap paginated anomaly response
+    const anomalyList: any[] = Array.isArray(anomalies)
+      ? anomalies
+      : (anomalies as { data: any[] }).data ?? [];
+
+    const openAnomalies = anomalyList.filter((a: any) => a.status === 'OPEN' || a.status === 'ACTIVE').length;
+    const highRiskIncidents = anomalyList.filter((a: any) => a.severity === 'HIGH' || a.severity === 'CRITICAL').length;
 
     return {
-      milkCollectedToday,
+      milkCollectedToday: finalMilkToday,
       milkCollectedChange: 0,
       milkInTransit,
       milkInTransitChange: 0,

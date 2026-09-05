@@ -24,15 +24,12 @@ const primaryNav: NavItem[] = [
   { label: 'Facilities',  href: '/facilities',  icon: '🏭' },
   { label: 'Anomalies',   href: '/anomalies',   icon: '⚠', badge: 41 },
   { label: 'Analytics',   href: '/analytics',   icon: '📈' },
-  { label: 'Audit Logs',  href: '/audit-logs',  icon: '📋' },
 ];
 
 const adminNav: NavItem[] = [
-  { label: 'Users',          href: '/users',          icon: '👥' },
-  { label: 'Roles & Perms',  href: '/roles',           icon: '🔑' },
-  { label: 'Businesses',     href: '/businesses',      icon: '🏢' },
-  { label: 'Animal Baselines', href: '/baselines',     icon: '🐄' },
-  { label: 'System Config',  href: '/system',          icon: '⚙' },
+  { label: 'Users',            href: '/users',      icon: '👥' },
+  { label: 'Roles & Perms',   href: '/roles',      icon: '🔑' },
+  { label: 'Animal Baselines', href: '/baselines',  icon: '🐄' },
 ];
 
 export default function Sidebar() {

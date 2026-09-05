@@ -26,15 +26,15 @@ async function fetchWithAuth(url: string, token: string | null) {
   return response.json();
 }
 
-export async function fetchMapFacilities(token: string | null): Promise<MapFacility[]> {
+export async function fetchMapFacilities(token: string | null = null): Promise<MapFacility[]> {
   return fetchWithAuth(`${API_BASE}/map/facilities`, token);
 }
 
-export async function fetchMapRoutes(token: string | null): Promise<MapRoute[]> {
+export async function fetchMapRoutes(token: string | null = null): Promise<MapRoute[]> {
   return fetchWithAuth(`${API_BASE}/map/routes`, token);
 }
 
-export async function fetchDistrictStats(token: string | null): Promise<DistrictStats[]> {
+export async function fetchDistrictStats(token: string | null = null): Promise<DistrictStats[]> {
   return fetchWithAuth(`${API_BASE}/map/district-stats`, token);
 }
 
